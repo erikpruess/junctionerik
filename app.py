@@ -27,7 +27,25 @@ def index():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM tickets').fetchall()
     conn.close()
+    if request.args.get('query'):
+        query = request.args.get('query')
+        posts = [post for post in posts if query.lower() in str(post).lower()]
     return render_template('index.html', posts=posts)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    query = ''
+    results = []
+
+    if request.method == 'POST':
+        query = request.form['query']
+        conn = get_db_connection()
+        results = conn.execute('SELECT * FROM tickets WHERE title LIKE ? OR development_proposal LIKE ?', 
+                               ('%' + query + '%', '%' + query + '%')).fetchall()
+        conn.close()
+
+    return render_template('index.html', posts=results, query=query)
 
 
 @app.route('/<int:post_id>')
