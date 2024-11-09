@@ -80,7 +80,7 @@ def edit(id):
             status = request.form['status']
             
             if not title:
-                flash('Title is required!')
+                print('Title is required!')
             else:
                 db.update_ticket(id, title=title, comment=comment, status=status)
                 return redirect(url_for('index'))
@@ -100,7 +100,7 @@ def edit(id):
 def delete(id):
     db.connect()
     db.delete_ticket(id)
-    flash(f'Ticket with id: {id} deleted')
+    print(f'Ticket with id: {id} deleted')
     db.close()
     return redirect(url_for('index'))
 

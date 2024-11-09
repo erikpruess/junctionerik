@@ -37,7 +37,7 @@
     </div>
 </form>
 <hr>
-<form action="{{ url_for('delete', id=ticket['id']) }}" method="ticket">
+<form action="{{ url_for('delete', id=ticket['id']) }}" method="POST">
     <input type="submit" value="Delete ticket"
             class="btn btn-danger btn-sm"
             onclick="return confirm('Are you sure you want to delete this ticket?')">
