@@ -3,6 +3,10 @@
 {% block content %}
     <h2>{% block title %} {{ post['title'] }} {% endblock %}</h2>
     <span class="badge badge-primary">{{ post['created'] }}</span>
+    <span class="badge 
+    {% if post['status'] == 'open' %}badge-status-open{% elif post['status'] == 'in_progress' %}badge-status-in-progress{% elif post['status'] == 'closed' %}badge-status-closed{% endif %}">
+    status: {{ post['status'] }}
+</span>
     <p>Development Proposal: {{ post['development_proposal'] }}</p>
     <p>Proposal Clarification: {{ post['development_clarification']}}</p>
 {% endblock %}

@@ -15,6 +15,10 @@
     <h3>{{ post['title'] }}</h3>
 </a>
 <span class="badge badge-primary">{{ post['created'] }}</span>
+<span class="badge 
+    {% if post['status'] == 'open' %}badge-status-open{% elif post['status'] == 'in_progress' %}badge-status-in-progress{% elif post['status'] == 'closed' %}badge-status-closed{% endif %}">
+    status: {{ post['status'] }}
+</span>
 <hr>
 {% endfor %}
 {% else %}
@@ -27,7 +31,10 @@
     <h2>{{ post['title'] }}</h2>
 </a>
 <span class="badge badge-primary">{{ post['created'] }}</span>
-<span class="badge badge-secondary">status: {{ post['status'] }}</span>
+<span class="badge 
+    {% if post['status'] == 'open' %}badge-status-open{% elif post['status'] == 'in_progress' %}badge-status-in-progress{% elif post['status'] == 'closed' %}badge-status-closed{% endif %}">
+    status: {{ post['status'] }}
+</span>
 <hr>
 {% endfor %}
 {% endif %}
