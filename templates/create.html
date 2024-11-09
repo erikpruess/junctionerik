@@ -6,16 +6,27 @@
 <form method="post">
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" name="title"
-               placeholder="Post title" class="form-control"
-               value="{{ request.form['title'] }}"></input>
+        <input type="text" name="title" placeholder="Post title" class="form-control" value="{{ request.form['title'] }}">
     </div>
 
     <div class="form-group">
         <label for="content">Content</label>
-        <textarea name="content" placeholder="Post content"
-                  class="form-control">{{ request.form['content'] }}</textarea>
+        <textarea name="content" placeholder="Post content" class="form-control">{{ request.form['content'] }}</textarea>
     </div>
+
+    <div class="form-group">
+        <label for="status">status</label>
+        <div class="radio">
+            <label><input type="radio" name="status" value="untagged" {% if request.form.get('status') == 'untagged' or not request.form.get('status') %}checked{% endif %}> untagged</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="status" value="draft" {% if request.form.get('status') == 'draft' %}checked{% endif %}> draft</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="status" value="done" {% if request.form.get('status') == 'done' %}checked{% endif %}> done</label>
+        </div>
+    </div>
+
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>

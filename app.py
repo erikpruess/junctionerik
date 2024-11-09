@@ -40,16 +40,18 @@ def create():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-
+        status = request.form.get('status', 'untagged')  # Default to 'untagged' if not provided
+        
         if not title:
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
-                         (title, content))
+            conn.execute('INSERT INTO posts (title, content, tag_status) VALUES (?, ?, ?)',
+                         (title, content, status))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
+    
     return render_template('create.html')
 
 @app.route('/<int:id>/edit', methods=('GET', 'POST'))
@@ -59,14 +61,13 @@ def edit(id):
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-
+        status = request.form.get('status', 'untagged')
         if not title:
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('UPDATE posts SET title = ?, content = ?'
-                         ' WHERE id = ?',
-                         (title, content, id))
+            conn.execute('UPDATE posts SET title = ?, content = ?, tag_status = ? WHERE id = ?', 
+                         (title, content, status, id))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
