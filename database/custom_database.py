@@ -1,6 +1,7 @@
 import sqlite3
 from os.path import isfile
 from typing import Literal
+from werkzeug.security import generate_password_hash
 
 from .custom_exceptions import (
     InvalidTicketError,
@@ -8,18 +9,6 @@ from .custom_exceptions import (
     UserNotExistError,
     TicketExistsError
 )
-
-
-
-
-# def db_auto_connect(func):
-#     """Decorator to automatically connect and close the database"""
-#     def wrapper(self, *args, **kwargs):
-#         self.connect()
-#         result = func(self, *args, **kwargs)
-#         self.close()
-#         return result
-#     return wrapper
 
 
 
@@ -62,7 +51,11 @@ class DatabaseConnector:
         sqlite3.Cursor
             The cursor object
         """
-        print(f'Query: {query!r} with args: {args}')
+        # If not connected, connect to the database
+        if not self._conn:
+            self.connect()
+        
+        print(f'Query {query!r} with args {args!r}')
         return self._cursor.execute(query, *args)
     
     
@@ -116,7 +109,7 @@ class DatabaseConnector:
         self._conn.commit()
         
     
-    def get_all_tickets(self) -> list[sqlite3.Row]:
+    def get_all_tickets(self, sort_by='created', order='asc') -> list[sqlite3.Row]:
         """Returns all the tickets in the database
         
         Returns
@@ -124,7 +117,7 @@ class DatabaseConnector:
         list[sqlite3.Row]
             A list of sqlite3.Row objects
         """
-        return self._fetch_all('SELECT * FROM tickets')
+        return self._fetch_all(f'SELECT * FROM tickets ORDER BY {sort_by} {order.upper()}')
     
     
     
@@ -155,11 +148,47 @@ class DatabaseConnector:
             raise ValueError('Email is not valid')
         
         # Add user to database
-        self._commit('INSERT INTO users (email, password, role) VALUES (?, ?, ?)', (email, password, role))
+        self._commit('INSERT INTO users (email, password, role) VALUES (?, ?, ?)', (email, generate_password_hash(password), role))
         print(f'User created: {email!r}')
         
         # Return the user id
         return self._fetch_one('SELECT id FROM users WHERE email = ?', (email,))['id']
+    
+    
+    def get_user_by_id(self, user_id: int) -> sqlite3.Row:
+        """Returns a user by id
+        
+        Parameters
+        ----------
+        user_id : int
+            The id of the user
+        
+        Returns
+        -------
+        sqlite3.Row
+            The user object
+        """
+        return self._fetch_one('SELECT * FROM users WHERE id = ?', (user_id,))
+    
+    
+    def get_user_by_email(self, email: str):
+        return self._fetch_one('SELECT * FROM users WHERE email = ?', (email,))
+    
+    
+    def get_ticket_owner(self, ticket_id: int) -> sqlite3.Row:
+        """Returns the owner of the ticket
+        
+        Parameters
+        ----------
+        ticket_id : int
+            The id of the ticket
+        
+        Returns
+        -------
+        sqlite3.Row
+            The user object
+        """
+        return self._fetch_one('SELECT * FROM users WHERE id = (SELECT user_id FROM tickets WHERE id = ?)', (ticket_id,))
     
     
     def create_a_ticket(self, user_id: int, **kwargs) -> None:
@@ -197,28 +226,20 @@ class DatabaseConnector:
         
         # Save the ticket to the database
         self._commit(
-            'INSERT INTO tickets (user_id, title, status, development_proposal, development_clarification, release_date, functional_area, ball_park_estimate, impact_on_market, product_improvement, priority, comment, next_steps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', # noqa
+            'INSERT INTO tickets (user_id, title, status, priority, description) VALUES (?, ?, ?, ?, ?)', # noqa
             (
                 user_id,
                 _title,
                 kwargs.get('status', 'open'),
-                kwargs.get('development_proposal'),
-                kwargs.get('development_clarification'),
-                kwargs.get('release_date'),
-                kwargs.get('functional_area'),
-                kwargs.get('ball_park_estimate'),
-                kwargs.get('impact_on_market'),
-                kwargs.get('product_improvement'),
                 kwargs.get('priority', 'low'),
-                kwargs.get('comment'),
-                kwargs.get('next_steps')
+                kwargs.get('description')
             )
         )
         print(f'Ticket {_title!r} created for user_id: {user_id}')
         
     
     
-    def get_user_tickets(self, user_id: int) -> list[sqlite3.Row]:
+    def get_user_tickets(self, user_id: int, sort_by='created', order='asc') -> list[sqlite3.Row]:
         """Returns all the tickets for a user
         
         Parameters
@@ -231,7 +252,8 @@ class DatabaseConnector:
         list[sqlite3.Row]
             A list of sqlite3.Row objects
         """
-        return self._fetch_all('SELECT * FROM tickets WHERE user_id = ?', (user_id,))
+        query = f'SELECT * FROM tickets WHERE user_id = ? ORDER BY {sort_by} {order.upper()}'
+        return self._fetch_all(query, user_id)
     
     
     

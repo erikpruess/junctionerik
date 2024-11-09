@@ -10,11 +10,6 @@
     </div>
 
     <div class="form-group">
-        <label for="content">Content</label>
-        <textarea name="content" placeholder="Ticket content" class="form-control">{{ request.form['content'] }}</textarea>
-    </div>
-
-    <div class="form-group">
         <label for="status">status</label>
         <div class="dropdown">
             <select name="status" class="form-control">
@@ -23,6 +18,22 @@
                 <option value="closed">Closed</option>
             </select>
         </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="priority">Priority</label>
+        <div class="dropdown">
+            <select name="priority" class="form-control">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" placeholder="Description for the ticket" class="form-control">{{ request.form['description'] }}</textarea>
     </div>
 
     <div class="form-group">

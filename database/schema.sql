@@ -15,14 +15,7 @@ CREATE TABLE tickets (
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     title VARCHAR(255) NOT NULL,
     status TEXT NOT NULL CHECK(status IN ('open', 'in_progress', 'closed')) DEFAULT 'open',
-    development_proposal TEXT,
-    development_clarification TEXT,
-    release_date DATE,
-    functional_area TEXT,
-    ball_park_estimate VARCHAR(10),
-    impact_on_market INT,
-    product_improvement TEXT,
     priority VARCHAR(10) NOT NULL CHECK(priority IN ('low', 'medium', 'high')) DEFAULT 'low',
-    comment TEXT,
-    next_steps TEXT
+    description TEXT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );

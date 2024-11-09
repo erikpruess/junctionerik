@@ -2,12 +2,36 @@
 
 {% block content %}
     <h1>{% block title %} Welcome to the amazing ticketing system {% endblock %}</h1>
+
+    <form method="get" action="{{ url_for('index') }}">
+        <div class="form-group">
+            <label for="sort_by">Sort by:</label>
+            <select name="sort_by" id="sort_by" class="form-control">
+                <option value="created" {% if sort_by == 'created' %}selected{% endif %}>Creation Date</option>
+                <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+                <option value="priority" {% if sort_by == 'priority' %}selected{% endif %}>Priority</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="order">Order:</label>
+            <select name="order" id="order" class="form-control">
+                <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascending</option>
+                <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+
     {% for ticket in tickets %}
         <a href="{{ url_for('ticket', ticket_id=ticket['id']) }}">
             <h2>{{ ticket['title'] }}</h2>
         </a>
         <span class="badge badge-primary">{{ ticket['created'] }}</span>
-        <span class="badge badge-secondary">status: {{ ticket['tag_status']  }}</span>
+        <span class="badge badge-secondary">status: {{ ticket['status'] }}</span>
+        <span class="badge badge-warning">priority: {{ ticket['priority'] }}</span>
+        <p>Owner: {{ ticket['owner_email'] }}</p>
         <a href="{{ url_for('edit', id=ticket['id']) }}">
             <span class="badge badge-warning">Edit</span>
         </a>
