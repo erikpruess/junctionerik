@@ -1,6 +1,57 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/InterVariable.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/static/fonts/InterVariable.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
 h1 {
-    border: 2px #eee solid;
-    color: brown;
-    text-align: center;
-    padding: 10px;
+    font-weight: normal;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Custom navbar styles */
+.navbar-brand {
+    font-size: 1.75em;
+    color: #aa2626;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.navbar{
+    position: sticky;
+}
+.navbar-brand:hover {
+    color: #45a93a !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav {
+    flex-wrap: nowrap;
+}
+
+.navbar-nav .nav-item {
+    flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.25em;
+    }
+}
+
+.header .header-first-row {
+    position: relative;
+    height: 48px;
+    background-color: #d4121e;
 }

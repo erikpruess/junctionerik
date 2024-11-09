@@ -6,7 +6,7 @@
 <form method="post">
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" name="title" placeholder="Post title"
+        <input type="text" name="title" placeholder="Ticket title"
                class="form-control"
                value="{{ request.form['title'] or post['title'] }}">
         </input>
@@ -14,7 +14,7 @@
 
     <div class="form-group">
         <label for="content">Content</label>
-        <textarea name="content" placeholder="Post content"
+        <te xtarea name="content" placeholder="Ticket content"
                   class="form-control">{{ request.form['content'] or post['content'] }}</textarea>
     </div>
 
