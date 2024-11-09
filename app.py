@@ -4,13 +4,13 @@ from werkzeug.exceptions import abort
 
 
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('database/database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
 def get_post(post_id):
     conn = get_db_connection()
-    post = conn.execute('SELECT * FROM posts WHERE id = ?',
+    post = conn.execute('SELECT * FROM tickets WHERE id = ?',
                         (post_id,)).fetchone()
     conn.close()
     if post is None:
@@ -25,7 +25,7 @@ app.config['SECRET_KEY'] = 'your secret key'
 @app.route('/')
 def index():
     conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM posts').fetchall()
+    posts = conn.execute('SELECT * FROM tickets').fetchall()
     conn.close()
     return render_template('index.html', posts=posts)
 
@@ -46,7 +46,7 @@ def create():
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('INSERT INTO posts (title, content, tag_status) VALUES (?, ?, ?)',
+            conn.execute('INSERT INTO tickets (title, comment, status) VALUES (?, ?, ?)',
                          (title, content, status))
             conn.commit()
             conn.close()
@@ -66,7 +66,7 @@ def edit(id):
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('UPDATE posts SET title = ?, content = ?, tag_status = ? WHERE id = ?', 
+            conn.execute('UPDATE tickets SET title = ?, comment = ?, status = ? WHERE id = ?', 
                          (title, content, status, id))
             conn.commit()
             conn.close()
