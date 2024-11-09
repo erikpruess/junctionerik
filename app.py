@@ -27,6 +27,7 @@ def index():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM tickets').fetchall()
     conn.close()
+    print(f"Number of posts fetched: {len(posts)}")
     if request.args.get('query'):
         query = request.args.get('query')
         posts = [post for post in posts if query.lower() in str(post).lower()]
