@@ -2,7 +2,7 @@ import sqlite3
 from os.path import isfile
 from typing import Literal
 
-from custom_exceptions import (
+from .custom_exceptions import (
     InvalidTicketError,
     UserExistsError,
     UserNotExistError,
@@ -10,6 +10,16 @@ from custom_exceptions import (
 )
 
 
+
+
+# def db_auto_connect(func):
+#     """Decorator to automatically connect and close the database"""
+#     def wrapper(self, *args, **kwargs):
+#         self.connect()
+#         result = func(self, *args, **kwargs)
+#         self.close()
+#         return result
+#     return wrapper
 
 
 
@@ -20,7 +30,7 @@ class DatabaseConnector:
         
         self._db_path = db_path
         
-        self.connect()
+        # self.connect()
         
     
     def connect(self) -> None:
@@ -52,6 +62,7 @@ class DatabaseConnector:
         sqlite3.Cursor
             The cursor object
         """
+        print(f'Query: {query!r} with args: {args}')
         return self._cursor.execute(query, *args)
     
     
@@ -72,8 +83,8 @@ class DatabaseConnector:
         """
         return self._query(query, *args).fetchone()
     
-    
-    def fetch_all(self, query: str, *args) -> list[sqlite3.Row]:
+
+    def _fetch_all(self, query: str, *args) -> list[sqlite3.Row]:
         """Fetches all the rows from the database
         
         Parameters
@@ -113,7 +124,8 @@ class DatabaseConnector:
         list[sqlite3.Row]
             A list of sqlite3.Row objects
         """
-        return self._query('SELECT * FROM tickets').fetchall()
+        return self._fetch_all('SELECT * FROM tickets')
+    
     
     
     def create_a_user(self, email: str, password: str, role: Literal['user', 'admin'] = 'user') -> int:
@@ -185,7 +197,7 @@ class DatabaseConnector:
         
         # Save the ticket to the database
         self._commit(
-            'INSERT INTO tickets (user_id, title, status, development_proposal, development_clarifiacation, release_date, functional_area, ball_park_estimate, impact_on_market, product_improvement, priority, comment, next_steps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', # noqa
+            'INSERT INTO tickets (user_id, title, status, development_proposal, development_clarification, release_date, functional_area, ball_park_estimate, impact_on_market, product_improvement, priority, comment, next_steps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', # noqa
             (
                 user_id,
                 _title,
@@ -204,7 +216,8 @@ class DatabaseConnector:
         )
         print(f'Ticket {_title!r} created for user_id: {user_id}')
         
-        
+    
+    
     def get_user_tickets(self, user_id: int) -> list[sqlite3.Row]:
         """Returns all the tickets for a user
         
@@ -218,7 +231,8 @@ class DatabaseConnector:
         list[sqlite3.Row]
             A list of sqlite3.Row objects
         """
-        return self.fetch_all('SELECT * FROM tickets WHERE user_id = ?', (user_id,))
+        return self._fetch_all('SELECT * FROM tickets WHERE user_id = ?', (user_id,))
+    
     
     
     def get_ticket(self, ticket_id: int) -> sqlite3.Row:
@@ -235,6 +249,7 @@ class DatabaseConnector:
             The ticket object
         """
         return self._fetch_one('SELECT * FROM tickets WHERE id = ?', (ticket_id,))
+    
     
     
     def update_ticket(self, ticket_id: int, **kwargs) -> None:
@@ -279,7 +294,8 @@ class DatabaseConnector:
         )
         print(f'Ticket {_title!r} updated')
         
-        
+    
+    
     def delete_ticket(self, ticket_id: int) -> None:
         """Deletes a ticket from the database
         
@@ -291,7 +307,8 @@ class DatabaseConnector:
         self._commit('DELETE FROM tickets WHERE id = ?', (ticket_id,))
         print(f'Ticket with id: {ticket_id} deleted')
         
-        
+    
+    
     def delete_user(self, user_id: int) -> None:
         """Deletes a user from the database
         

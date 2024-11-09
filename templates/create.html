@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{% block title %} Create a New Ticket {% endblock %}</h1>
 
-<form method="post">
+<form method="POST">
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" name="title" placeholder="Ticket title" class="form-control" value="{{ request.form['title'] }}">
@@ -16,14 +16,12 @@
 
     <div class="form-group">
         <label for="status">status</label>
-        <div class="radio">
-            <label><input type="radio" name="status" value="untagged" {% if request.form.get('status') == 'untagged' or not request.form.get('status') %}checked{% endif %}> untagged</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="status" value="draft" {% if request.form.get('status') == 'draft' %}checked{% endif %}> draft</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="status" value="done" {% if request.form.get('status') == 'done' %}checked{% endif %}> done</label>
+        <div class="dropdown">
+            <select name="status" class="form-control">
+                <option value="open">Open</option>
+                <option value="in_progress">In Progress</option>
+                <option value="closed">Closed</option>
+            </select>
         </div>
     </div>
 

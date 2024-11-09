@@ -1,34 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Edit "{{ post['title'] }}" {% endblock %}</h1>
+<h1>{% block title %} Edit "{{ ticket['title'] }}" {% endblock %}</h1>
 
-<form method="post">
+<form method="POST">
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" name="title" placeholder="Ticket title"
                class="form-control"
-               value="{{ request.form['title'] or post['title'] }}">
+               value="{{ request.form['title'] or ticket['title'] }}">
         </input>
     </div>
 
     <div class="form-group">
-        <label for="content">Content</label>
-        <te xtarea name="content" placeholder="Ticket content"
-                  class="form-control">{{ request.form['content'] or post['content'] }}</textarea>
+        <label for="content">Comment</label>
+        <input type="text" name="comment" placeholder="Ticket comment"
+                class="form-control"
+                value="{{ request.form['comment'] or ticket['comment'] }}">
+        </input>
     </div>
 
 
     <div class="form-group">
         <label for="status">Status</label>
-        <div class="radio">
-            <label><input type="radio" name="status" value="untagged" {% if post['tag_status'] == 'untagged' %}checked{% endif %}> untagged</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="status" value="draft" {% if post['tag_status'] == 'draft' %}checked{% endif %}> draft</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="status" value="done" {% if post['tag_status'] == 'done' %}checked{% endif %}> done</label>
+        <div class="dropdown">
+            <select name="status" class="form-control">
+                <option value="open">Open</option>
+                <option value="in_progress">In Progress</option>
+                <option value="closed">Closed</option>
+            </select>
         </div>
     </div>
 
@@ -37,9 +37,9 @@
     </div>
 </form>
 <hr>
-<form action="{{ url_for('delete', id=post['id']) }}" method="POST">
-    <input type="submit" value="Delete Post"
+<form action="{{ url_for('delete', id=ticket['id']) }}" method="ticket">
+    <input type="submit" value="Delete ticket"
             class="btn btn-danger btn-sm"
-            onclick="return confirm('Are you sure you want to delete this post?')">
+            onclick="return confirm('Are you sure you want to delete this ticket?')">
 </form>
 {% endblock %}

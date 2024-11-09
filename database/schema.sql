@@ -16,7 +16,7 @@ CREATE TABLE tickets (
     title VARCHAR(255) NOT NULL,
     status TEXT NOT NULL CHECK(status IN ('open', 'in_progress', 'closed')) DEFAULT 'open',
     development_proposal TEXT,
-    development_clarifiacation TEXT,
+    development_clarification TEXT,
     release_date DATE,
     functional_area TEXT,
     ball_park_estimate VARCHAR(10),

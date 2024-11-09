@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% block title %} {{ ticket['title'] }} {% endblock %}</h2>
+    <span class="badge badge-primary">{{ ticket['created'] }}</span>
+    <p>{{ ticket['comment'] }}</p>
+{% endblock %}

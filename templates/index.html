@@ -2,13 +2,13 @@
 
 {% block content %}
     <h1>{% block title %} Welcome to the amazing ticketing system {% endblock %}</h1>
-    {% for post in posts %}
-        <a href="{{ url_for('post', post_id=post['id']) }}">
-            <h2>{{ post['title'] }}</h2>
+    {% for ticket in tickets %}
+        <a href="{{ url_for('ticket', ticket_id=ticket['id']) }}">
+            <h2>{{ ticket['title'] }}</h2>
         </a>
-        <span class="badge badge-primary">{{ post['created'] }}</span>
-        <span class="badge badge-secondary">status: {{ post['tag_status']  }}</span>
-        <a href="{{ url_for('edit', id=post['id']) }}">
+        <span class="badge badge-primary">{{ ticket['created'] }}</span>
+        <span class="badge badge-secondary">status: {{ ticket['tag_status']  }}</span>
+        <a href="{{ url_for('edit', id=ticket['id']) }}">
             <span class="badge badge-warning">Edit</span>
         </a>
         <hr>
