@@ -10,23 +10,29 @@
     </div>
 
     <div class="form-group">
-        <label for="content">Content</label>
-        <textarea name="content" placeholder="Ticket content" class="form-control">{{ request.form['content'] }}</textarea>
+        <label for="content">Development Proposal</label>
+        <textarea name="content" placeholder="Development Proposal" class="form-control">{{ request.form['content'] }}</textarea>
     </div>
 
     <div class="form-group">
-        <label for="status">status</label>
-        <div class="radio">
-            <label><input type="radio" name="status" value="untagged" {% if request.form.get('status') == 'untagged' or not request.form.get('status') %}checked{% endif %}> untagged</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="status" value="draft" {% if request.form.get('status') == 'draft' %}checked{% endif %}> draft</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="status" value="done" {% if request.form.get('status') == 'done' %}checked{% endif %}> done</label>
-        </div>
+        <label for="content_clarification">Development Clarification</label>
+        <textarea name="content_clarification" placeholder="Development Clarification"
+            class="form-control">{{ request.form['content_clarification'] }}</textarea>
     </div>
 
+<!--<div class="form-group">
+        <label for="status">status</label>
+        <div class="radio">
+            <label><input type="radio" name="status" value="open" {% if request.form.get('status') == 'open' or not request.form.get('status') %}checked{% endif %}> open</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="status" value="in_progress" {% if request.form.get('status') == 'in_progress' %}checked{% endif %}> in_progress</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="status" value="closed" {% if request.form.get('status') == 'closed' %}checked{% endif %}> closed</label>
+        </div>
+    </div>
+-->
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>

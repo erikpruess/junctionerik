@@ -40,14 +40,14 @@ def create():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        status = request.form.get('status', 'untagged')  # Default to 'untagged' if not provided
+        content_clarification = request.form['content_clarification']
         
         if not title:
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('INSERT INTO tickets (title, comment, status) VALUES (?, ?, ?)',
-                         (title, content, status))
+            conn.execute('INSERT INTO tickets (title, development_proposal, development_clarification) VALUES (?, ?, ?)',
+                         (title, content, content_clarification))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
@@ -66,7 +66,7 @@ def edit(id):
             flash('Title is required!')
         else:
             conn = get_db_connection()
-            conn.execute('UPDATE tickets SET title = ?, comment = ?, status = ? WHERE id = ?', 
+            conn.execute('UPDATE tickets SET title = ?, development_proposal = ?, status = ? WHERE id = ?', 
                          (title, content, status, id))
             conn.commit()
             conn.close()
