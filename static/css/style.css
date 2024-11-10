@@ -48,10 +48,40 @@ img {
     .navbar-brand {
         font-size: 1.25em;
     }
+                   .sidebar {
+                       width: 100%;
+                   }
 }
 
 .header .header-first-row {
     position: relative;
     height: 48px;
     background-color: #d4121e;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.badge-status-open {
+    background-color: #A15885;
+    color: white;
+}
+
+.badge-status-in-progress {
+    background-color: #f8f43f;
+    color: black;
+}
+
+.badge-status-closed {
+    background-color: #277158;
+    color: white;
+}
+
+a {
+    color: black;
+}
+
+h2 {
+    font-size: 18px;
 }

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Create a New Ticket {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" placeholder="Ticket title" class="form-control" value="{{ request.form['title'] }}">
+    </div>
+
+    <div class="form-group">
+        <label for="content">Development Proposal</label>
+        <textarea name="content" placeholder="Development Proposal" class="form-control">{{ request.form['content'] }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="content_clarification">Development Clarification</label>
+        <textarea name="content_clarification" placeholder="Development Clarification"
+            class="form-control">{{ request.form['content_clarification'] }}</textarea>
+    </div>
+
+<!--<div class="form-group">
+        <label for="status">status</label>
+        <div class="radio">
+            <label><input type="radio" name="status" value="open" {% if request.form.get('status') == 'open' or not request.form.get('status') %}checked{% endif %}> open</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="status" value="in_progress" {% if request.form.get('status') == 'in_progress' %}checked{% endif %}> in_progress</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="status" value="closed" {% if request.form.get('status') == 'closed' %}checked{% endif %}> closed</label>
+        </div>
+    </div>
+-->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+{% endblock %}
